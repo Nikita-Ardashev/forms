@@ -5,14 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "cwd": "${workspaceFolder}/server",
+            "command": "npm run dev",
             "name": "server",
-            "preLaunchTask": "npm: build - server",
-            "program": "${workspaceFolder}/server/dist/app.js",
             "request": "launch",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "type": "node"
+            "type": "node-terminal"
         },
         {
             "cwd": "${workspaceFolder}/client",
