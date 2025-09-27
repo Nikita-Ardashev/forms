@@ -1,5 +1,6 @@
 import { configDotenv } from 'dotenv';
 import { Pool } from 'pg';
+import { logger } from './logger';
 
 configDotenv();
 
@@ -11,11 +12,11 @@ const pool = new Pool({
 });
 
 pool.on('connect', () => {
-	console.log('Подключение к PostgreSQL установлено');
+	logger.info('Подключение к PostgreSQL установлено');
 });
 
-pool.on('error', (err) => {
-	console.error('Ошибка подключения к PostgreSQL:', err);
+pool.on('error', (e: any) => {
+	logger.error('Ошибка подключения к PostgreSQL:', e);
 });
 
 export { pool };

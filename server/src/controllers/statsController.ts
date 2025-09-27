@@ -1,7 +1,7 @@
 import { asyncHandler } from '@/utils/asyncHandler';
 
 const stats = asyncHandler(async (req, res) => {
-	res.send(req.query);
+	res.send();
 });
 
 const statsController = { stats };

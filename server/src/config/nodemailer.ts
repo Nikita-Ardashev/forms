@@ -1,25 +1,24 @@
 import nodemailer from 'nodemailer';
+import { logger } from './logger';
 
-// Создание транспортера для Nodemailer :cite[1]:cite[2]
 const transporter = nodemailer.createTransport({
-	service: 'gmail',
-	host: 'smtp.gmail.com',
-	port: 587,
-	secure: false,
+	service: process.env.EMAIL_SERVICE,
+	host: process.env.EMAIL_HOST,
+	port: Number(process.env.EMAIL_PORT),
+	secure: true,
 	requireTLS: true,
 	auth: {
-		user: '',
-		pass: '',
+		user: process.env.EMAIL_USER,
+		pass: process.env.EMAIL_PASS,
 	},
 	logger: true,
 });
 
-// Проверка подключения
-transporter.verify((error) => {
+transporter.verify((error: any) => {
 	if (error) {
-		console.error('Ошибка подключения к почтовому серверу:', error);
+		logger.error('Ошибка подключения к почтовому серверу:', error);
 	} else {
-		console.log('Подключение к почтовому серверу установлено');
+		logger.info('Подключение к почтовому серверу установлено');
 	}
 });
 

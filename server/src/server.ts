@@ -1,6 +1,20 @@
+import { createServer } from 'http';
 import app from './app';
+import GracefulShutdown from 'http-graceful-shutdown';
+import { finalFunction, preShutdownFunction, shutdownFunction } from './config/graceful';
 const PORT = 3000;
 
-app.listen(PORT, () => {
+const server = createServer(app);
+
+server.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
+});
+
+GracefulShutdown(server, {
+	signals: 'SIGINT SIGTERM',
+	timeout: 30000,
+	development: process.env.NODE_ENV === 'development',
+	preShutdown: preShutdownFunction,
+	onShutdown: shutdownFunction,
+	finally: finalFunction,
 });
