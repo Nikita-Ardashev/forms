@@ -20,7 +20,8 @@ export const sendMessageToEmail = (props: IApplication) => {
 
 	try {
 		transporter.sendMail(message);
-		logger.info('Уведомления разосланы на почту успешно');
+		const child = logger.child({ message: props });
+		child.info('Уведомления разосланы на почту успешно');
 	} catch (e: any) {
 		logger.error(e);
 	}

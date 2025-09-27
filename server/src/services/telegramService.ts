@@ -81,7 +81,8 @@ export const sendMessageToBoot = async (application: IApplication) => {
 				continue;
 			}
 		}
-		logger.info('Уведомления разосланы по чатам телеграма успешно');
+		const child = logger.child({ message: form });
+		child.info('Уведомления разосланы по чатам телеграма успешно');
 	} catch (e: any) {
 		logger.error(e);
 		throw new Error(e);
