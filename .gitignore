@@ -90,10 +90,6 @@ web_modules/
 .next
 out
 
-# Nuxt.js build / generate output
-.nuxt
-dist
-
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and not Next.js
@@ -152,5 +148,11 @@ node_modules
 psd
 thumb
 sketch
+
+# Builds
+*/dist
+*/build
+
+server/public
 
 # End of https://www.toptal.com/developers/gitignore/api/node,react
