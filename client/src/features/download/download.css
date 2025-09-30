@@ -1,0 +1,16 @@
+.download {
+	cursor: pointer;
+	background: blue;
+	color: white;
+	font-size: 16px;
+	border-radius: 8px;
+	padding: 12px 16px;
+}
+
+.download:hover {
+	opacity: 0.6;
+}
+
+.download:active {
+	opacity: 0.8;
+}

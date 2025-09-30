@@ -1,12 +1,10 @@
-import { pool } from '@/config/database';
 import { logger } from '@/config/logger';
+import applicationDAO from '@/DAO/applicationDAO';
 import { IApplication } from '@/models/application';
 import { IErrorResponse } from '@/models/response';
 import { sanitizeRequest } from '@/security/sanitize';
-import { sendMessageToEmail } from '@/services/emailService';
-import { sendMessageToBoot } from '@/services/telegramService';
 import { asyncHandler } from '@/utils/asyncHandler';
-import { exponentialRetry } from '@/utils/gracefulShutdown';
+import { verifyJwtToken } from '@/utils/jwt';
 import { monitorRetry } from '@/utils/retryMonitor';
 import { NextFunction } from 'express';
 import { body, validationResult } from 'express-validator';
@@ -19,7 +17,7 @@ const validateApplication = [
 		.withMessage('Короткое или длинное имя пользователя'),
 	body('phone').isMobilePhone('ru-RU').withMessage('Неверный формат номера'),
 	body('message').isLength({ max: 1000 }),
-	body('serviceType').isString().withMessage('Неверный тип'),
+	body('service_type').isString().withMessage('Неверный тип'),
 ];
 
 const create = asyncHandler(async (req, res) => {
@@ -29,63 +27,37 @@ const create = asyncHandler(async (req, res) => {
 	try {
 		validationResult(req).throw();
 
-		const { name, email, phone, serviceType, message, source } = body as Omit<
-			IApplication,
-			'id' | 'status' | 'createdAt'
-		>;
-
-		const SQLCreateApplication = `
-    	  INSERT INTO application (name, email, phone, serviceType, message, source)
-    	  VALUES ($1, $2, $3, $4, $5, $6)
-    	  RETURNING id
-    	`;
-		const dbOperation = async () => {
-			return await pool.query(SQLCreateApplication, [
-				name,
-				email,
-				phone,
-				serviceType,
-				message,
-				source,
-			]);
-		};
-
-		const result = await exponentialRetry(dbOperation, 3);
-
-		const sendNotifications = async () => {
-			await Promise.allSettled([sendMessageToBoot(body), sendMessageToEmail(body)]);
-		};
-
-		await exponentialRetry(sendNotifications, 3);
-		monitorRetry('send_notifications', 1, true);
+		const result = await applicationDAO.create(body);
 
 		res.json({
+			success: true,
 			data: { ...body, id: result.rows[0].id },
-			message: 'Заявка успешно создана',
+			message: 'Заявка успешно создана!',
 		});
 	} catch (e: any) {
 		logger.error(e);
 		monitorRetry('create_application_full', 1, false, e);
-		res.send({ error: e, success: false } as IErrorResponse);
+		res.status(500).send({
+			error: e,
+			success: false,
+			message: 'Не удалось создать заявку!',
+		} as IErrorResponse);
 	}
 });
 
 const getAll = asyncHandler(async (req, res) => {
-	const SQLList = `SELECT * FROM Application ORDER BY "createdAt" DESC`;
-
 	try {
-		const dbOperation = async () => {
-			return await pool.query(SQLList);
-		};
-
-		const result = await exponentialRetry(dbOperation, 3);
-		monitorRetry('get_all_applications', 1, true);
+		verifyJwtToken(req.headers.authorization as string);
+		const result = await applicationDAO.getAll();
 
 		res.json({ success: true, data: result.rows, count: result.rows.length });
 	} catch (e: any) {
 		logger.error(e);
 		monitorRetry('get_all_applications', 1, false, e);
-		res.send({ error: e, success: false } as IErrorResponse);
+		res.status(500).send({
+			error: 'Не удалось получить заявки',
+			success: false,
+		} as IErrorResponse);
 	}
 });
 

@@ -1,49 +1,13 @@
-import { pool } from '@/config/database';
 import { logger } from '@/config/logger';
+import telegramDAO from '@/DAO/telegramDAO';
 import { IApplication } from '@/models/application';
 import { IForm } from '@/models/form';
 import TelegramBot from 'node-telegram-bot-api';
 
-interface IChat {
-	chat_id: number;
-}
-
 const token = process.env.TG_BOT_TOKEN as string;
 const bot = new TelegramBot(token, { polling: true });
 
-const addChatId = async (chatId: number) => {
-	try {
-		const getChatIdSQL = `
-		SELECT chat_id FROM Telegram_Bot
-	`;
-		const chatIds: IChat[] = (await pool.query(getChatIdSQL)).rows;
-		if (chatIds.some((chat) => chat.chat_id == chatId)) return;
-	} catch (e) {
-		logger.error(e);
-	}
-
-	try {
-		const addChatIdSQL = `
-		INSERT INTO Telegram_Bot (chat_id) VALUES ('${chatId}')
-	`;
-		await pool.query(addChatIdSQL);
-	} catch (e) {
-		logger.error(e);
-	}
-};
-
-const getChatIds = async () => {
-	try {
-		const getChatIdsSQL = `
-		SELECT chat_id FROM Telegram_Bot
-	`;
-		const chatIds = await pool.query(getChatIdsSQL);
-		return chatIds.rows;
-	} catch (e: any) {
-		logger.error(e);
-		throw new Error(e);
-	}
-};
+const { addChatId, getChatIds } = telegramDAO;
 
 const subscriberChatIds: number[] = [];
 
@@ -64,15 +28,15 @@ export const sendMessageToBoot = async (application: IApplication) => {
 			Имя: application.name,
 			Email: application.email,
 			Телефон: application.phone,
-			Услуга: application.serviceType,
+			Услуга: application.service_type,
 			Сообщение: application.message,
-			Время: application.createdAt,
+			Время: application.created_at,
 		};
 		const text = Object.keys(form)
 			.map((k) => `${k}: ${form[k as keyof typeof form]}`)
 			.join(',\n');
 
-		const chatIds: IChat[] = await getChatIds();
+		const chatIds = (await getChatIds()).rows;
 
 		for (const chat of chatIds) {
 			try {

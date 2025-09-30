@@ -7,11 +7,11 @@ const createTableApplication = `
         name VARCHAR(50) NOT NULL CHECK(length(name) >= 2),
         email VARCHAR UNIQUE NOT NULL,
         phone VARCHAR UNIQUE NOT NULL,
-        serviceType VARCHAR(20) NOT NULL CHECK (
-            serviceType IN ('консультация', 'разработка', 'поддержка', 'другое')
+        service_type VARCHAR(20) NOT NULL CHECK (
+            service_type IN ('консультация', 'разработка', 'поддержка', 'другое')
         ),
         message VARCHAR(1000),
-        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         status VARCHAR(20) DEFAULT 'новая' CHECK (
             status IN ('новая', 'обработана')
         ),

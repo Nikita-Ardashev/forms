@@ -1,5 +1,11 @@
 export type TStatus = 'новая' | 'обработана';
 export type TService = 'консультация' | 'разработка' | 'поддержка' | 'другое';
+export const serviceTypes: TService[] = [
+	'другое',
+	'консультация',
+	'поддержка',
+	'разработка',
+];
 
 export interface IApplication {
 	id: string; // 'uuid'
@@ -8,7 +14,7 @@ export interface IApplication {
 	phone: string; // 'string (формат +7XXXXXXXXXX)'
 	service_type: TService; // 'enum (консультация|разработка|поддержка|другое)'
 	message: string; // 'string (максимум 1000 символов)'
-	created_at: Date; // 'datetime (ISO 8601)'
+	created_at: string; // 'datetime (ISO 8601)'
 	status: TStatus; // 'enum (новая|обработана)'
 	source: string; // 'string (откуда пришла заявка)'
 }

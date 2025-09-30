@@ -1,0 +1,7 @@
+.type-filter {
+	width: fit-content;
+	background: var(--text-primary);
+}
+.type-filter__input {
+	color: var(--text-hover);
+}

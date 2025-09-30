@@ -1,0 +1,33 @@
+.hint {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	padding: 16px 24px;
+	box-sizing: border-box;
+	position: fixed;
+	width: 256px;
+	top: 24px;
+	left: 100%;
+	background: var(--text-primary);
+	border-top: 2px solid var(--text-hover);
+	border-bottom: 2px solid var(--text-hover);
+	border-left: 2px solid var(--text-hover);
+	border-radius: 8px 0 0 8px;
+	z-index: 100;
+}
+
+.hint-view {
+	left: calc(100% - 256px);
+}
+
+.hint > p {
+	font-size: 16px;
+	color: var(--text-hover);
+}
+
+.hint-error {
+}
+
+.hint-error > p {
+	color: red;
+}

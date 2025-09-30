@@ -1,6 +1,9 @@
 import express from 'express';
 import appRouter from './routes';
 import helmet from 'helmet';
+import { configDotenv } from 'dotenv';
+
+configDotenv();
 
 const app = express();
 

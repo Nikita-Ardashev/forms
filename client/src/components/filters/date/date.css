@@ -1,0 +1,23 @@
+.date-filter {
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+	align-items: center;
+	background: var(--text-primary);
+	padding: 4px 8px;
+	border-radius: 8px;
+}
+
+.date-filter p {
+	color: var(--text-hover);
+}
+
+.date-filter input {
+	color: var(--text-hover);
+	background: transparent;
+}
+
+.date-filter input::-webkit-calendar-picker-indicator {
+	filter: invert(1);
+	cursor: pointer;
+}

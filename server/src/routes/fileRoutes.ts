@@ -1,10 +1,11 @@
+import fileController from '@/controllers/fileController';
 import { Router } from 'express';
+
+const { exportFile } = fileController;
 
 const fileRouter = Router();
 
 /** Скачать CSV с заявками */
-fileRouter.get('/export', (req, res) => {
-	res.send('file');
-});
+fileRouter.get('/export', exportFile);
 
 export default fileRouter;
