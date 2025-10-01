@@ -14,7 +14,7 @@ export const apiCreateApplication = async (
 		return res.data;
 	} catch (e: any) {
 		console.error(e);
-		throw new Error(e);
+		return e.response.data;
 	}
 };
 
@@ -29,7 +29,7 @@ export const apiGetAll = async (): Promise<IResponse<IApplication[]>> => {
 		return res.data;
 	} catch (e: any) {
 		console.error(e);
-		throw new Error(e);
+		return e.response.data;
 	}
 };
 
@@ -56,6 +56,6 @@ export const apiGetCSVFile = async () => {
 		window.URL.revokeObjectURL(downloadUrl);
 	} catch (e: any) {
 		console.error(e);
-		throw new Error(e);
+		return e.response.data;
 	}
 };

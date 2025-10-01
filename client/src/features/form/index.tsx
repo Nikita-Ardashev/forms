@@ -35,6 +35,7 @@ export const Form = () => {
 	const handlerSubmitCreate = handleSubmit(async (data) => {
 		setHint({ message: '' });
 		const res = await apiCreateApplication(data);
+
 		setHint(() => {
 			const newV = { message: res.message, isError: res.error !== undefined };
 			return newV;

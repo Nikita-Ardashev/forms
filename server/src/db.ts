@@ -5,8 +5,8 @@ const createTableApplication = `
     (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         name VARCHAR(50) NOT NULL CHECK(length(name) >= 2),
-        email VARCHAR UNIQUE NOT NULL,
-        phone VARCHAR UNIQUE NOT NULL,
+        email VARCHAR NOT NULL,
+        phone VARCHAR NOT NULL,
         service_type VARCHAR(20) NOT NULL CHECK (
             service_type IN ('консультация', 'разработка', 'поддержка', 'другое')
         ),
@@ -27,7 +27,7 @@ const createTableTelegramBot = `
     );
 `;
 
-async function initializeDatabase() {
+export default async function initializeDatabase() {
 	try {
 		await pool.query(createTableApplication);
 		console.log('Таблица Application создана.');

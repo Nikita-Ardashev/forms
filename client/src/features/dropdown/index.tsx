@@ -46,6 +46,7 @@ export const Dropdown = <T extends string>(props: IDropdown<T>) => {
 				<button
 					{...props.itemProps}
 					key={item}
+					type="button"
 					onClick={() => {
 						setValue(item);
 						if (props.callback !== undefined) props.callback(item);
