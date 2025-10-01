@@ -5,6 +5,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
+COPY .env ./
+
 RUN mkdir -p logs
 
 COPY . .
