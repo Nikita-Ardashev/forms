@@ -6,7 +6,7 @@
 		"dev": "nodemon | npx pino-pretty",
 		"start": "node dist/server.js",
 		"db": "ts-node src/db.ts",
-		"build": "tsc --outDir public",
+		"build": "tsc",
 		"build:watch": "tsc -w",
 		"clean": "rimraf dist",
 		"format": "prettier --write src/**/*.ts"
