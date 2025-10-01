@@ -18,7 +18,7 @@ services:
   server:
     build:
       context: ./server
-      dockerfile: Dockerfile.server
+      dockerfile: Dockerfile
       target: production
     restart: unless-stopped
     environment:
@@ -32,7 +32,7 @@ services:
   client:
     build:
       context: ./client
-      dockerfile: Dockerfile.client
+      dockerfile: Dockerfile
       target: production
     restart: unless-stopped
     depends_on:
