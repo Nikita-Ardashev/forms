@@ -1,4 +1,0 @@
-RewriteEngine On
-
-# Пример перенаправление всех запросов /api/* на localhost:7000
-RewriteRule ^api/(.*)$ http://localhost:7000/$1 [P,L]
