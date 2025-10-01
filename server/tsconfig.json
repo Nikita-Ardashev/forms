@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
-		"target": "ES2020",
-		"module": "commonjs",
-		"lib": ["ES2020"],
+		"target": "ESNEXT",
+		"module": "NodeNEXT",
+		"lib": ["ESNEXT"],
 		"outDir": "./dist",
 		"rootDir": "./src",
 		"strict": true,
@@ -20,7 +20,6 @@
 		"noImplicitThis": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
-		"moduleResolution": "node",
 		"baseUrl": "./",
 		"paths": {
 			"@/*": ["src/*"],
