@@ -21,9 +21,9 @@ const validateApplication = [
 ];
 
 const create = asyncHandler(async (req, res) => {
-	const { body } = sanitizeRequest(req);
-	body as IApplication;
-
+	const { body: sanitizeBody } = sanitizeRequest(req);
+	const body = sanitizeBody as IApplication;
+	body.source = req.headers.origin ?? '';
 	try {
 		validationResult(req).throw();
 

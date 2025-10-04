@@ -17,12 +17,12 @@ bot.onText(/\/start/, async (msg) => {
 	if (!subscriberChatIds.includes(chatId)) {
 		subscriberChatIds.push(chatId);
 		await addChatId(chatId);
-		console.log(`Новый подписчик: ${chatId}`);
+		logger.info(`Новый подписчик: ${chatId}`);
 	}
 	bot.sendMessage(chatId, 'Привет! Вы подписались на рассылку.');
 });
 
-export const sendMessageToBoot = async (application: IApplication) => {
+export const sendMessageToBot = async (application: IApplication) => {
 	try {
 		const form: IForm = {
 			Имя: application.name,
@@ -30,7 +30,7 @@ export const sendMessageToBoot = async (application: IApplication) => {
 			Телефон: application.phone,
 			Услуга: application.service_type,
 			Сообщение: application.message,
-			Время: application.created_at,
+			Время: new Date(application.created_at).toISOString(),
 		};
 		const text = Object.keys(form)
 			.map((k) => `${k}: ${form[k as keyof typeof form]}`)

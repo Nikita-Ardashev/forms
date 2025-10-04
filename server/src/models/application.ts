@@ -8,7 +8,7 @@ export interface IApplication {
 	phone: string; // 'string (формат +7XXXXXXXXXX)'
 	service_type: TService; // 'enum (консультация|разработка|поддержка|другое)'
 	message: string; // 'string (максимум 1000 символов)'
-	created_at: Date; // 'datetime (ISO 8601)'
+	created_at: Date | string; // 'datetime (ISO 8601)'
 	status: TStatus; // 'enum (новая|обработана)'
 	source: string; // 'string (откуда пришла заявка)'
 }

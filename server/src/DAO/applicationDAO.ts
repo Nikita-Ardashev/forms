@@ -2,7 +2,7 @@ import { pool } from '@/config/database';
 import { logger } from '@/config/logger';
 import { IApplication } from '@/models/application';
 import { sendMessageToEmail } from '@/services/emailService';
-import { sendMessageToBoot } from '@/services/telegramService';
+import { sendMessageToBot } from '@/services/telegramService';
 import { exponentialRetry } from '@/utils/gracefulShutdown';
 import { monitorRetry } from '@/utils/retryMonitor';
 import { QueryResult } from 'pg';
@@ -32,8 +32,13 @@ const create = async (body: IApplication) => {
 
 		const result = await exponentialRetry(dbOperation, 3);
 
+		const savedBody = (await get(result.rows[0].id)).rows[0] as IApplication;
+
 		const sendNotifications = async () => {
-			await Promise.allSettled([sendMessageToBoot(body), sendMessageToEmail(body)]);
+			await Promise.allSettled([
+				sendMessageToBot(savedBody),
+				sendMessageToEmail(savedBody),
+			]);
 		};
 
 		await exponentialRetry(sendNotifications, 3);
@@ -64,6 +69,24 @@ const getAll = async () => {
 	}
 };
 
-const applicationDAO = { create, getAll };
+const get = async (id: string) => {
+	try {
+		const SQLList = `SELECT * FROM Application WHERE id = '${id}'`;
+
+		const dbOperation = async () => {
+			return await pool.query(SQLList);
+		};
+
+		const result = await exponentialRetry(dbOperation, 3);
+		monitorRetry('get_all_applications', 1, true);
+
+		return result as QueryResult<IApplication>;
+	} catch (e: any) {
+		logger.error(e);
+		throw new Error(e);
+	}
+};
+
+const applicationDAO = { create, getAll, get };
 
 export default applicationDAO;

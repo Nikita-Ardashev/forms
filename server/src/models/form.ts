@@ -6,5 +6,5 @@ export interface IForm {
 	Телефон: string;
 	Услуга: TService;
 	Сообщение: string;
-	Время: Date;
+	Время: Date | string;
 }
