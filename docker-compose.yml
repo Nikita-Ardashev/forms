@@ -55,6 +55,8 @@ services:
       dockerfile: Dockerfile
       target: production
     restart: unless-stopped
+    volumes:
+      - /etc/ssl:/etc/ssl:ro
     ports:
       - "443:443"
     depends_on:
