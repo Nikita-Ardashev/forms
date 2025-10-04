@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import './form.css';
 import { Dropdown } from '../dropdown';
 import { serviceTypes, type TService } from '../../models/application';
@@ -18,7 +18,7 @@ const formSchema = z.object({
 		message: 'Некорректный номер телефона!',
 	}),
 	email: z.email('Некорректный email!'),
-	service_type: z.literal(serviceTypes),
+	service_type: z.literal(serviceTypes, 'Некорректный тип услуги!'),
 	message: z.string().max(1000, 'Сообщение не может быть больше 1000 символов!'),
 });
 
@@ -29,6 +29,7 @@ export const Form = () => {
 		register,
 		handleSubmit,
 		formState: { errors },
+		control,
 	} = useForm<FormSchema>({ resolver: zodResolver(formSchema) });
 
 	const [hint, setHint] = useState<ComponentProps<typeof Hint>>({ message: '' });
@@ -67,12 +68,21 @@ export const Form = () => {
 					autoComplete="email"
 				/>
 				{errors.email && <p>{errors.email.message}</p>}
-				<Dropdown<TService>
-					items={serviceTypes}
-					defaultValue={'другое'}
-					inputProps={{ className: 'form__input' }}
-					itemProps={{ className: 'form__input' }}
-					register={register('service_type')}
+				<Controller
+					name="service_type"
+					control={control}
+					defaultValue="другое"
+					render={({ field }) => (
+						<Dropdown<TService>
+							items={serviceTypes}
+							defaultValue={'другое'}
+							callback={(value) => {
+								field.onChange(value);
+							}}
+							inputProps={{ className: 'form__input' }}
+							itemProps={{ className: 'form__input' }}
+						/>
+					)}
 				/>
 				{errors.service_type && <p>{errors.service_type.message}</p>}
 				<textarea

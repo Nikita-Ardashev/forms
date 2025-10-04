@@ -8,13 +8,11 @@ import {
 	type InputHTMLAttributes,
 } from 'react';
 import './dropdown.css';
-import type { UseFormRegisterReturn } from 'react-hook-form';
 
 interface IDropdown<T extends string> {
 	callback?: (value: T) => void;
 	items: T[];
 	defaultValue?: T;
-	register?: UseFormRegisterReturn;
 	wrapperProps?: HTMLAttributes<HTMLDivElement>;
 	inputProps?: InputHTMLAttributes<HTMLInputElement>;
 	itemProps?: ButtonHTMLAttributes<HTMLButtonElement>;
@@ -70,7 +68,6 @@ export const Dropdown = <T extends string>(props: IDropdown<T>) => {
 				onClick={handlerClick}
 				value={value}
 				type="button"
-				{...props.register}
 			/>
 			<div
 				{...props.itemsProps}

@@ -8,7 +8,12 @@ export const apiCreateApplication = async (
 	body: IForm,
 ): Promise<IResponse<IApplication>> => {
 	try {
-		const res = await axios.post('/api/application', body, {
+		const bodyWithSource = body as IApplication;
+		navigator.geolocation.getCurrentPosition((position) => {
+			const { latitude, longitude } = position.coords;
+			bodyWithSource.source = `Широта: ${latitude}, Долгота: ${longitude}`;
+		});
+		const res = await axios.post('/api/application', bodyWithSource, {
 			headers: { 'Content-Type': 'application/json' },
 		});
 		return res.data;
