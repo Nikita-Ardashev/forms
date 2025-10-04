@@ -3,16 +3,18 @@ import axios from 'axios';
 import type { IForm } from '../models/form';
 import type { IApplication } from '../models/application';
 import type { IResponse } from '../models/response';
+import { getLocation } from '../utils/location';
 
 export const apiCreateApplication = async (
 	body: IForm,
 ): Promise<IResponse<IApplication>> => {
 	try {
 		const bodyWithSource = body as IApplication;
-		navigator.geolocation.getCurrentPosition((position) => {
-			const { latitude, longitude } = position.coords;
-			bodyWithSource.source = `Широта: ${latitude}, Долгота: ${longitude}`;
-		});
+		bodyWithSource.source = 'Не удалось получить данные о локации';
+
+		const { lat, lng } = await getLocation();
+		bodyWithSource.source = `Широта: ${lat}, Долгота: ${lng}`;
+
 		const res = await axios.post('/api/application', bodyWithSource, {
 			headers: { 'Content-Type': 'application/json' },
 		});
